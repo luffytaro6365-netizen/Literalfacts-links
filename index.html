@@ -5,41 +5,34 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>LiteralFacts Links</title>
   <style>
-    body{margin:0;display:grid;place-items:center;min-height:100vh;background:#0b1220;font-family:system-ui,Arial;color:#eaf0ff}
-    a{display:inline-block;background:#ffd34d;color:#111;padding:14px 18px;border-radius:12px;font-weight:800;text-decoration:none}
+    body{margin:0;font-family:system-ui,Arial;background:#0b1220;color:#eaf0ff}
+    .wrap{max-width:720px;margin:0 auto;padding:28px 18px;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{width:100%;background:#111b2e;border:1px solid #1f2a44;border-radius:14px;padding:20px}
+    h1{margin:0 0 6px;font-size:26px}
+    p{margin:0 0 14px;color:#9db0d9}
+    .btn{display:block;width:100%;padding:14px 16px;margin:10px 0;border-radius:12px;border:1px solid #243253;background:#142037;color:#eaf0ff;text-decoration:none;font-weight:700;text-align:center}
+    .btn.accent{background:#ffd34d;color:#111}
+    .copy{display:flex;gap:8px;margin-top:8px}
+    .copy input{flex:1;padding:12px;border-radius:10px;border:1px solid #2b395a;background:#0e1730;color:#eaf0ff}
+    .copy button{padding:12px 14px;border-radius:10px;border:1px solid #2b395a;background:#223055;color:#eaf0ff;font-weight:700}
   </style>
 </head>
 <body>
-  <a href="https://youtube.com/@literalfactsyt?si=ZywQmKORhS-tSkq9">Subscribe on YouTube</a>
-</body>
-</html>
+  <div class="wrap">
+    <div class="card">
+      <h1>LiteralFacts Links</h1>
+      <p>All links in one place. Shorts viewers: copy the URL below if links aren’t clickable.</p>
 
-<style>
-  body{margin:0;font-family:system-ui,Arial;background:#0b1220;color:#eaf0ff}
-  .wrap{max-width:720px;margin:0 auto;padding:28px 18px;min-height:100vh;display:flex;align-items:center;justify-content:center}
-  .card{width:100%;background:#111b2e;border:1px solid #1f2a44;border-radius:14px;padding:20px}
-  h1{margin:0 0 6px;font-size:26px}
-  p{margin:0 0 14px;color:#9db0d9}
-  .btn{display:block;width:100%;padding:14px 16px;margin:10px 0;border-radius:12px;border:1px solid #243253;background:#142037;color:#eaf0ff;text-decoration:none;font-weight:700;text-align:center}
-  .btn.accent{background:#ffd34d;color:#111}
-  .copy{display:flex;gap:8px;margin-top:8px}
-  .copy input{flex:1;padding:12px;border-radius:10px;border:1px solid #2b395a;background:#0e1730;color:#eaf0ff}
-  .copy button{padding:12px 14px;border-radius:10px;border:1px solid #2b395a;background:#223055;color:#eaf0ff;font-weight:700}
-</style>
+      <a class="btn accent" href="https://youtube.com/@literalfactsyt?si=ZywQmKORhS-tSkq9">Subscribe on YouTube</a>
+      <a class="btn" href="https://amzn.to/49mwTRL">Insulated Straw Tumbler</a>
+      <a class="btn" href="https://amzn.to/3WVvOcd">Sensitivity Toothpaste</a>
 
-<div class="wrap">
-  <div class="card">
-    <h1>LiteralFacts Links</h1>
-    <p>All links in one place. Shorts viewers: copy the URL below if links aren’t clickable.</p>
-
-    <a class="btn accent" href="https://youtube.com/@literalfactsyt?si=ZywQmKORhS-tSkq9">Subscribe on YouTube</a>
-    <a class="btn" href= "https://amzn.to/49mwTRL" >Insulated Straw Tumbler</a>
-    <a class="btn" href="https://amzn.to/3WVvOcd">Sensitivity Toothpaste</a>
-
-    <p style="margin-top:16px">Copy this hub URL:</p>
-    <div class="copy">
-      <input id="hub" value="literalfacts.bio" readonly>
-      <button onclick="navigator.clipboard.writeText(document.getElementById('hub').value).then(()=>alert('Copied!'));">Copy</button>
+      <p style="margin-top:16px">Copy this hub URL:</p>
+      <div class="copy">
+        <input id="hub" value="https://luffytaro6365-netizen.github.io" readonly>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('hub').value).then(()=>alert('Copied!'));">Copy</button>
+      </div>
     </div>
   </div>
-</div>
+</body>
+</html>
