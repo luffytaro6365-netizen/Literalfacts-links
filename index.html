@@ -5,36 +5,110 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>LiteralFacts Links</title>
   <style>
-    body{margin:0;font-family:system-ui,Arial;background:#0b1220;color:#eaf0ff}
-    .wrap{max-width:720px;margin:0 auto;padding:28px 18px;min-height:100vh;display:flex;align-items:center;justify-content:center}
-    .card{width:100%;background:#111b2e;border:1px solid #1f2a44;border-radius:14px;padding:20px}
-    h1{margin:0 0 6px;font-size:26px}
-    p{margin:0 0 14px;color:#9db0d9}
-    .btn{display:block;width:100%;padding:14px 16px;margin:10px 0;border-radius:12px;border:1px solid #243253;background:#142037;color:#eaf0ff;text-decoration:none;font-weight:700;text-align:center}
-    .btn.accent{background:#ffd34d;color:#111}
-    .copy{display:flex;gap:8px;margin-top:8px}
-    .copy input{flex:1;padding:12px;border-radius:10px;border:1px solid #2b395a;background:#0e1730;color:#eaf0ff}
-    .copy button{padding:12px 14px;border-radius:10px;border:1px solid #2b395a;background:#223055;color:#eaf0ff;font-weight:700}
+    :root{--bg:#0b1220;--card:#111b2e;--txt:#eaf0ff;--mut:#9db0d9;--acc:#ffd34d;--line:#1f2a44}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,Arial;background:var(--bg);color:var(--txt)}
+    .wrap{max-width:760px;margin:0 auto;padding:28px 18px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    h1{margin:0;font-size:26px}
+    .small{color:var(--mut);font-size:13px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:12px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 4px}
+    .input{flex:1;min-width:180px;display:flex;gap:8px}
+    input[type="text"]{flex:1;padding:12px;border-radius:10px;border:1px solid #2b395a;background:#0e1730;color:var(--txt)}
+    .btn{display:block;width:100%;padding:14px 16px;margin:10px 0;border-radius:12px;border:1px solid #243253;background:#142037;color:var(--txt);text-decoration:none;font-weight:700;text-align:center}
+    .btn.acc{background:var(--acc);color:#111}
+    .tag{font-size:12px;color:#111;background:var(--acc);padding:4px 8px;border-radius:8px;margin-left:8px}
+    .copy{display:flex;gap:8px;margin-top:10px}
+    .copy input{flex:1;padding:12px;border-radius:10px;border:1px solid #2b395a;background:#0e1730;color:var(--txt)}
+    .copy button{padding:12px 14px;border-radius:10px;border:1px solid #2b395a;background:#223055;color:var(--txt);font-weight:700}
+    .list{margin-top:6px}
   </style>
 </head>
 <body>
   <div class="wrap">
+    <header>
+      <div>
+        <h1>LiteralFacts</h1>
+        <div class="small">All links in one place</div>
+      </div>
+    </header>
+
     <div class="card">
-      <h1>LiteralFacts Links</h1>
-      <p>All links in one place. Shorts viewers: copy the URL below if links aren’t clickable.</p>
+      <div class="row">
+        <div class="input">
+          <input id="q" type="text" placeholder="Search links or tags… (e.g., book, gear, toothpaste)">
+        </div>
+        <button id="clear" class="copy button" style="display:none;padding:12px 14px;border-radius:10px;border:1px solid #2b395a;background:#223055;color:#eaf0ff;font-weight:700">Clear</button>
+      </div>
+      <div id="list" class="list" aria-live="polite">Loading…</div>
 
-      <a class="btn accent" href="https://youtube.com/@literalfactsyt?si=ZywQmKORhS-tSkq9">Subscribe on YouTube</a>
-      <a class="btn" href="https://amzn.to/49mwTRL">Insulated Straw Tumbler</a>
-      <a class="btn" href="https://amzn.to/3WVvOcd">Sensitivity Toothpaste</a>
-      <a class="btn" href="https://amzn.to/4nrfb2S">The Salt Thief</a>
-
-      
-      <p style="margin-top:16px">Copy this hub URL:</p>
-      <div class="copy">
-        <input id="hub" value="Literalfacts.in" readonly>
-        <button onclick="navigator.clipboard.writeText(document.getElementById('hub').value).then(()=>alert('Copied!'));">Copy</button>
+      <div style="margin-top:12px">
+        <div class="small">Copy this hub URL</div>
+        <div class="copy">
+          <input id="hub" value="https://luffytaro6365-netizen.github.io" readonly>
+          <button onclick="navigator.clipboard.writeText(document.getElementById('hub').value).then(()=>alert('Copied!'));">Copy</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <script>
+    const listEl = document.getElementById('list');
+    const q = document.getElementById('q');
+    const clearBtn = document.getElementById('clear');
+
+    let data = [], view = [];
+
+    async function loadLinks() {
+      try {
+        const res = await fetch('links.json', {cache:'no-store'});
+        data = await res.json();
+
+        // Sort newest first by date
+        data.sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+
+        view = data.slice();
+        render(view);
+      } catch (e) {
+        listEl.textContent = 'Could not load links.json';
+        console.error(e);
+      }
+    }
+
+    function render(items) {
+      if (!items.length) {
+        listEl.innerHTML = '<div class="small">No links match your search.</div>';
+        return;
+      }
+      listEl.innerHTML = items.map((x,i)=>{
+        const tag = x.tag ? `<span class="tag">${escapeHtml(x.tag)}</span>` : '';
+        const cls = i===0 ? 'btn acc' : 'btn';
+        return `<a class="${cls}" href="${escapeAttr(x.url)}" target="_blank" rel="noopener">${escapeHtml(x.title)} ${tag}</a>`;
+      }).join('');
+    }
+
+    function escapeHtml(s=''){return s.replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]))}
+    function escapeAttr(s=''){return s.replace(/"/g,'&quot;')}
+
+    q.addEventListener('input', ()=>{
+      const v = q.value.trim().toLowerCase();
+      clearBtn.style.display = v ? 'inline-block' : 'none';
+      if (!v) return render(data);
+      const filtered = data.filter(x =>
+        (x.title||'').toLowerCase().includes(v) ||
+        (x.tag||'').toLowerCase().includes(v)
+      );
+      render(filtered);
+    });
+
+    clearBtn.addEventListener('click', ()=>{
+      q.value = '';
+      clearBtn.style.display = 'none';
+      render(data);
+    });
+
+    loadLinks();
+  </script>
 </body>
 </html>
